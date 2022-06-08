@@ -1,4 +1,26 @@
 {
   "singleQuote": true,
-  "trailingComma": "all"
+  "trailingComma": "all",
+  "tabWidth": 2,
+  "useTabs": false,
+  "printWidth": 80,
+  "semi": true,
+  "bracketSpacing": true,
+  "bracketSameLine": true,
+  "arrowParens": "avoid",
+  "overrides": [
+    {
+      "files": "*.json",
+      "options": {
+        "singleQuote": false
+      }
+    },
+    {
+      "files": ".*rc",
+      "options": {
+        "singleQuote": false,
+        "parser": "json"
+      }
+    }
+  ]
 }
