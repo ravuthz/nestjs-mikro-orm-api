@@ -36,3 +36,9 @@ lerna-debug.log*
 
 # Environment
 .env*
+
+# Temporary
+tmp
+*.tmp
+temp
+*.temp
