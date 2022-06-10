@@ -1,6 +1,6 @@
 import type { EntityManager } from '@mikro-orm/core';
 import { Seeder } from '@mikro-orm/seeder';
-import { Note } from '../enities/note.entity';
+import { Note } from '../../note/entities/note.entity';
 import { NoteFactory } from '../factories/NoteFactory';
 
 export class NoteSeeder extends Seeder {
