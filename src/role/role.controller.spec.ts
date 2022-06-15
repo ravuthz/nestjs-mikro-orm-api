@@ -1,17 +1,17 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { SharedModule } from '../shared/shared.module';
-import { NoteController } from './note.controller';
-import { NoteModule } from './note.module';
+import { RoleController } from './role.controller';
+import { RoleModule } from './role.module';
 
-describe('NoteController', () => {
-  let controller: NoteController;
+describe('RoleController', () => {
+  let controller: RoleController;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [SharedModule, NoteModule],
+      imports: [SharedModule, RoleModule],
     }).compile();
 
-    controller = module.get<NoteController>(NoteController);
+    controller = module.get<RoleController>(RoleController);
   });
 
   it('should be defined', () => {

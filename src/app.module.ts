@@ -1,30 +1,14 @@
-import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { Module } from '@nestjs/common';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import configuration from './app.config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import options from './database/database.config';
 import { NoteModule } from './note/note.module';
+import { PermissionModule } from './permission/permission.module';
+import { RoleModule } from './role/role.module';
+import { SharedModule } from './shared/shared.module';
+import { UserModule } from './user/user.module';
+
 @Module({
-  imports: [
-    ConfigModule.forRoot({
-      load: [configuration],
-      isGlobal: true,
-      cache: true,
-    }),
-    MikroOrmModule.forRootAsync({
-      inject: [ConfigService],
-      useFactory: async (config: ConfigService) => {
-        const database = config.get('database');
-        return {
-          ...options,
-          ...database,
-        };
-      },
-    }),
-    NoteModule,
-  ],
+  imports: [SharedModule, NoteModule, UserModule, RoleModule, PermissionModule],
   controllers: [AppController],
   providers: [AppService],
 })

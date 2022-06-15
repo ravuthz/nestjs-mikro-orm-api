@@ -1,17 +1,10 @@
-import {
-  Entity,
-  EntityRepositoryType,
-  PrimaryKey,
-  Property,
-} from '@mikro-orm/core';
+import { Entity, EntityRepositoryType, Property } from '@mikro-orm/core';
+import { BaseEntity } from '../../shared/entities/base.entity';
 import { NoteRepository } from '../note.repository';
 
 @Entity()
-export class Note {
+export class Note extends BaseEntity {
   [EntityRepositoryType]?: NoteRepository;
-
-  @PrimaryKey()
-  id!: number;
 
   @Property()
   name: string;
@@ -19,13 +12,8 @@ export class Note {
   @Property({ nullable: true })
   note: string;
 
-  @Property()
-  createdAt = new Date();
-
-  @Property({ onUpdate: () => new Date() })
-  updatedAt = new Date();
-
   constructor(partial: Partial<Note> = {}) {
+    super();
     Object.assign(this, partial);
   }
 }

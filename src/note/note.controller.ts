@@ -1,44 +1,22 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Param,
-  Patch,
-  Post,
-  Query,
-} from '@nestjs/common';
+import { EntityRepository } from '@mikro-orm/core';
+import { InjectRepository } from '@mikro-orm/nestjs';
+import { Controller } from '@nestjs/common';
+import { BaseCrudController } from '../shared/base-crud.controller';
+import { BaseCrudService } from '../shared/base-crud.service';
 import { CreateNoteDto } from './dto/create-note.dto';
-import { PageOptionsDto } from './dto/page-options.dto';
 import { UpdateNoteDto } from './dto/update-note.dto';
-import { NoteService } from './note.service';
+import { Note } from './entities/note.entity';
 
 @Controller('notes')
-export class NoteController {
-  constructor(private readonly noteService: NoteService) {}
-
-  @Post()
-  create(@Body() createNoteDto: CreateNoteDto) {
-    return this.noteService.create(createNoteDto);
-  }
-
-  @Get()
-  findAll(@Query() query: PageOptionsDto) {
-    return this.noteService.findAll(query);
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.noteService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateNoteDto: UpdateNoteDto) {
-    return this.noteService.update(+id, updateNoteDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.noteService.remove(+id);
+export class NoteController extends BaseCrudController<
+  Note,
+  CreateNoteDto,
+  UpdateNoteDto
+> {
+  constructor(
+    @InjectRepository(Note)
+    private readonly repository: EntityRepository<Note>,
+  ) {
+    super(new BaseCrudService<Note>(repository));
   }
 }

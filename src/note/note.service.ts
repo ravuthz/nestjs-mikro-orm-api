@@ -1,7 +1,7 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { CreateNoteDto } from './dto/create-note.dto';
-import { PageOptionsDto } from './dto/page-options.dto';
-import { PageResponseDto } from './dto/page-response.dto';
+import { PageOptionsDto } from '../shared/dto/page-options.dto';
+import { PageResponseDto } from '../shared/dto/page-response.dto';
 import { UpdateNoteDto } from './dto/update-note.dto';
 import { Note } from './entities/note.entity';
 import { NoteRepository } from './note.repository';
