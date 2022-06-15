@@ -1,13 +1,21 @@
 import { PageOptionsDto } from './dto/page-options.dto';
+import { PageResponseDto } from './dto/page-response.dto';
 
-export interface IBaseCrud<T> {
-  findAll(query: PageOptionsDto);
+export interface IBaseCrud<
+  EntityType,
+  CreateDto,
+  UpdateDto,
+  QueryDto extends PageOptionsDto,
+> {
+  findAll(
+    query: QueryDto,
+  ): Promise<EntityType[]> | Promise<PageResponseDto<unknown>>;
 
-  findOne(id: any);
+  findOne(id: string | number): Promise<EntityType>;
 
-  create(createDto: any);
+  create(createDto: CreateDto): Promise<EntityType>;
 
-  update(id: number, updateDto: any);
+  update(id: string | number, updateDto: UpdateDto): Promise<EntityType>;
 
-  remove(id: number);
+  remove(id: string | number): Promise<EntityType | object>;
 }

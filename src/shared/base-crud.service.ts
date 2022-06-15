@@ -5,12 +5,18 @@ import { PageOptionsDto } from './dto/page-options.dto';
 import { PageResponseDto } from './dto/page-response.dto';
 
 @Injectable()
-export class BaseCrudService<T extends AnyEntity<T>> implements IBaseCrud<T> {
+export class BaseCrudService<
+  T extends AnyEntity<T>,
+  C,
+  U,
+  Q extends PageOptionsDto,
+> implements IBaseCrud<T, C, U, Q>
+{
   private logger = new Logger(BaseCrudService.name);
 
   constructor(readonly repository: EntityRepository<T>) {}
 
-  async findAll(query: PageOptionsDto) {
+  async findAll(query: Q) {
     this.logger.debug(JSON.stringify(query || {}, null, 2));
     const results = await this.repository.findAndCount(null, query.toOptions());
     return new PageResponseDto(results, query);

@@ -1,46 +1,71 @@
 import {
   Body,
-  Controller,
   Delete,
   Get,
   Param,
   Patch,
   Post,
   Query,
+  Type,
   UsePipes,
-  ValidationPipe,
 } from '@nestjs/common';
+import { AbstractValidationPipe } from './abstract-validation-pipe.pipe';
+import { IBaseCrud } from './base-crud.interface';
 import { BaseCrudService } from './base-crud.service';
 import { PageOptionsDto } from './dto/page-options.dto';
 import { BaseEntity } from './entities/base.entity';
 
-@Controller()
-export class BaseCrudController<T extends BaseEntity, CreateDTO, UpdateDTO> {
-  constructor(private readonly service: BaseCrudService<T>) {}
+export function BaseCrudController<
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  T extends BaseEntity,
+  C,
+  U,
+  Q extends PageOptionsDto,
+>(createDto: Type<C>, updateDto: Type<U>, queryDto: Type<Q>): any {
+  const createPipe = new AbstractValidationPipe(
+    { whitelist: true, transform: true },
+    { body: createDto },
+  );
+  const updatePipe = new AbstractValidationPipe(
+    { whitelist: true, transform: true },
+    { body: updateDto },
+  );
+  const queryPipe = new AbstractValidationPipe(
+    { whitelist: true, transform: true },
+    { query: queryDto },
+  );
+  class BCrudController<T extends BaseEntity, C, U, Q extends PageOptionsDto>
+    implements IBaseCrud<T, C, U, Q>
+  {
+    constructor(public service: BaseCrudService<T, C, U, Q>) {}
 
-  @Get()
-  findAll(@Query() query: PageOptionsDto) {
-    return this.service.findAll(query);
-  }
+    @Get()
+    @UsePipes(queryPipe)
+    findAll(@Query() query: Q) {
+      return this.service.findAll(query);
+    }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.service.findOne(+id);
-  }
+    @Get(':id')
+    findOne(@Param('id') id: string) {
+      return this.service.findOne(+id);
+    }
 
-  @Post()
-  @UsePipes(new ValidationPipe())
-  public create(@Body() createDto: CreateDTO) {
-    return this.service.create(createDto);
-  }
+    @Post()
+    @UsePipes(createPipe)
+    public create(@Body() createDto: C) {
+      return this.service.create(createDto);
+    }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateDto: UpdateDTO) {
-    return this.service.update(+id, updateDto);
-  }
+    @Patch(':id')
+    @UsePipes(updatePipe)
+    update(@Param('id') id: string, @Body() updateDto: U) {
+      return this.service.update(+id, updateDto);
+    }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.service.remove(+id);
+    @Delete(':id')
+    remove(@Param('id') id: string) {
+      return this.service.remove(+id);
+    }
   }
+  return BCrudController;
 }
