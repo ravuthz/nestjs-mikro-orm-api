@@ -42,3 +42,6 @@ tmp
 *.tmp
 temp
 *.temp
+
+# Sqlite or Local database
+*.db
