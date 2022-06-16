@@ -1,17 +1,17 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { SharedModule } from '../shared/shared.module';
-import { PermissionModule } from './permission.module';
-import { PermissionService } from './permission.service';
+import { AuthModule } from './auth.module';
+import { AuthService } from './auth.service';
 
-describe('PermissionService', () => {
-  let service: PermissionService;
+describe('AuthService', () => {
+  let service: AuthService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [SharedModule, PermissionModule],
+      imports: [SharedModule, AuthModule],
     }).compile();
 
-    service = module.get<PermissionService>(PermissionService);
+    service = module.get<AuthService>(AuthService);
   });
 
   it('should be defined', () => {
