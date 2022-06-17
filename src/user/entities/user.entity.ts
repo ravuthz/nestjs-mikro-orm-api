@@ -41,4 +41,23 @@ export class User extends BaseEntity {
     super();
     Object.assign(this, partial);
   }
+
+  async getAllRoleNames() {
+    await this.roles.init();
+    const roles = this.roles.getItems();
+    console.log('getAllRoleNames: ', roles);
+    return roles.map((item) => item.name);
+  }
+
+  async getAllPermissionNames() {
+    await this.roles.init();
+
+    let permissions = [];
+    for (const role of this.roles.getItems()) {
+      await role.permissions.init();
+      permissions = [...permissions, ...role.permissions.getItems()];
+    }
+    console.log('getAllPermissionNames: ', permissions);
+    return permissions.map((item) => item.name);
+  }
 }

@@ -8,15 +8,16 @@ import {
   Req,
   UseGuards,
 } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
 import { toUserDto } from '../shared/utils/mappers';
-import { User } from '../user/entities/user.entity';
 import { AuthService } from './auth.service';
+import { HasPermissions } from './decorators/permissions.decorator';
+import { HasRoles } from './decorators/roles.decorator';
 import { LoginUserDto } from './dto/login-user-dto';
 import { RegisterUserDto } from './dto/register-user-dto';
+import { TokenDto } from './dto/token-dto';
 import { UserDto } from './dto/user-dto';
-import { JwtAuthGuard } from './jwt-auth.guard';
-
+import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import { RequestUser } from './request-user.interface';
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
@@ -35,20 +36,49 @@ export class AuthController {
   }
 
   @Post('login')
-  public async login(@Body() loginUserDto: LoginUserDto): Promise<any> {
+  public async login(@Body() loginUserDto: LoginUserDto): Promise<TokenDto> {
     return await this.authService.login(loginUserDto);
   }
 
   @Post('refresh')
   @UseGuards(JwtAuthGuard)
-  public async refresh(@Req() request: any): Promise<string | never> {
-    const user: User = request.user;
-    return this.authService.refresh(user);
+  public async refresh(@Req() req: RequestUser): Promise<TokenDto> {
+    return this.authService.refresh(req.user);
   }
 
   @Get('user')
-  @UseGuards(AuthGuard())
-  public async testAuth(@Req() req: any): Promise<UserDto> {
+  // @Roles('ADMIN', 'USER')
+  // @UseGuards(AuthGuard(), RolesGuard)
+  @HasRoles('ADMIN', 'USER')
+  public async testAuthUser(@Req() req: RequestUser): Promise<UserDto> {
+    return toUserDto(req.user);
+  }
+
+  @Get('user-read')
+  // @Permissions('admin:read')
+  // @UseGuards(AuthGuard(), PermissionsGuard)
+  @HasPermissions('admin:read')
+  public async testAuthUserPermissions(
+    @Req() req: RequestUser,
+  ): Promise<UserDto> {
+    return toUserDto(req.user);
+  }
+
+  @Get('admin')
+  // @Roles('ADMIN')
+  // @UseGuards(AuthGuard(), RolesGuard)
+  @HasRoles('ADMIN')
+  public async testAuthAdmin(@Req() req: RequestUser): Promise<UserDto> {
+    return toUserDto(req.user);
+  }
+
+  @Get('admin-read')
+  // @Permissions('admin:read')
+  // @UseGuards(AuthGuard(), PermissionsGuard)
+  @HasPermissions('admin:read')
+  public async testAuthAdminPermissions(
+    @Req() req: RequestUser,
+  ): Promise<UserDto> {
     return toUserDto(req.user);
   }
 }

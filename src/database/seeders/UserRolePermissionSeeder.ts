@@ -1,6 +1,8 @@
 import type { EntityManager } from '@mikro-orm/core';
 import { Seeder } from '@mikro-orm/seeder';
 import { Logger } from '@nestjs/common';
+import { Permission } from '../../permission/entities/permission.entity';
+import { Role } from '../../role/entities/role.entity';
 import { encryptPassword } from '../../shared/utils/auth';
 import { User } from '../../user/entities/user.entity';
 import { PermissionFactory } from '../factories/PermissionFactory';
@@ -82,5 +84,61 @@ export class UserRolePermissionSeeder extends Seeder {
       user5,
       users,
     });
+
+    const userPermissions = this.makeCrudPermissions(em, 'user');
+    const rolePermissions = this.makeCrudPermissions(em, 'role');
+    const permPermissions = this.makeCrudPermissions(em, 'permission');
+
+    const roleAdmin = em.create(Role, {
+      name: 'ADMIN',
+      note: 'Generate [Admin] role by system',
+    });
+
+    const roleUser = em.create(Role, {
+      name: 'USER',
+      note: 'Generate [USER] role by system',
+    });
+
+    roleAdmin.permissions.set([
+      ...userPermissions,
+      ...rolePermissions,
+      ...permPermissions,
+    ]);
+    em.persist(roleAdmin);
+
+    roleUser.permissions.set([
+      userPermissions[1],
+      rolePermissions[1],
+      permPermissions[1],
+    ]);
+    em.persist(roleUser);
+
+    user1.roles.add(roleAdmin);
+    em.persist(user1);
+
+    user2.roles.add(roleUser);
+    em.persist(user2);
+
+    user3.roles.add(roleUser);
+    em.persist(user3);
+
+    user4.roles.add(roleUser);
+    em.persist(user4);
+
+    user5.roles.add(roleUser);
+    em.persist(user5);
+  }
+
+  private makeCrudPermissions(em: EntityManager, model: string) {
+    const keys = ['create', 'read', 'update', 'delete'];
+    const permissions = [];
+    keys.forEach((action: string) => {
+      const permission = em.create(Permission, {
+        name: `${model}:${action}`.toUpperCase(),
+        note: `Generate ${action} for ${model} by system`,
+      });
+      permissions.push(permission);
+    });
+    return permissions;
   }
 }

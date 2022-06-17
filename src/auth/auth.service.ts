@@ -10,6 +10,7 @@ import { User } from '../user/entities/user.entity';
 import { UserService } from '../user/user.service';
 import { LoginUserDto } from './dto/login-user-dto';
 import { RegisterUserDto } from './dto/register-user-dto';
+import { TokenDto } from './dto/token-dto';
 import { UserDto } from './dto/user-dto';
 import { JwtPayload } from './jwt-payload.interface';
 
@@ -25,12 +26,12 @@ export class AuthService {
     return await this.usersService.create(userDto);
   }
 
-  async login(loginUserDto: LoginUserDto): Promise<any> {
+  async login(loginUserDto: LoginUserDto): Promise<TokenDto> {
     const user = await this.usersService.findByLogin(loginUserDto);
     return this.jwtCreateToken(user);
   }
 
-  async refresh(user: User): Promise<any> {
+  async refresh(user: User): Promise<TokenDto> {
     // return this.generateToken(user);
     return this.jwtCreateToken(user);
   }
@@ -61,9 +62,9 @@ export class AuthService {
     return true;
   }
 
-  private jwtCreateToken(user: User): any {
+  private async jwtCreateToken(user: User): Promise<TokenDto> {
     return {
-      user: toUserDto(user),
+      user: await toUserDto(user),
       expiresIn: process.env.EXPIRES_IN,
       accessToken: this.generateToken(user),
     };
