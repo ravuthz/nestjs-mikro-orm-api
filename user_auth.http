@@ -1,0 +1,22 @@
+### Login to API
+# @name login
+POST /api/auth/login HTTP/1.1
+Host: localhost:9000
+Content-Type: application/json
+
+{
+    "username": "adminz",
+    "password": "123123"
+}
+
+
+### Check /user route
+GET /api/auth/user HTTP/1.1
+Host: localhost:9000
+Authorization: Bearer {{login.response.body.accessToken}}
+
+
+### Check /admin route
+GET /api/auth/admin HTTP/1.1
+Host: localhost:9000
+Authorization: Bearer {{login.response.body.accessToken}}
