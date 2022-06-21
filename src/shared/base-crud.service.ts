@@ -1,4 +1,8 @@
-import { AnyEntity, EntityRepository } from '@mikro-orm/core';
+import {
+  AnyEntity,
+  EntityRepository,
+  RequiredEntityData,
+} from '@mikro-orm/core';
 import { Injectable, Logger } from '@nestjs/common';
 import { IBaseCrud } from './base-crud.interface';
 import { PageOptionsDto } from './dto/page-options.dto';
@@ -7,7 +11,7 @@ import { PageResponseDto } from './dto/page-response.dto';
 @Injectable()
 export class BaseCrudService<
   T extends AnyEntity<T>,
-  C,
+  C extends RequiredEntityData<T>,
   U,
   Q extends PageOptionsDto,
 > implements IBaseCrud<T, C, U, Q>
@@ -26,15 +30,15 @@ export class BaseCrudService<
     return await this.repository.findOneOrFail(id);
   }
 
-  async create(createNoteDto: any) {
+  async create(createNoteDto: C) {
     const item = this.repository.create(createNoteDto);
     await this.repository.persistAndFlush(item);
     return item;
   }
 
-  async update(id: number, updateNoteDto: any) {
+  async update(id: number, updateNoteDto: U) {
     const item = await this.findOne(id);
-    Object.assign(item, updateNoteDto);
+    this.repository.assign(item, updateNoteDto);
     await this.repository.persistAndFlush(item);
     return item;
   }

@@ -1,3 +1,4 @@
+import { RequiredEntityData } from '@mikro-orm/core';
 import {
   Body,
   Delete,
@@ -18,7 +19,7 @@ import { BaseEntity } from './entities/base.entity';
 export function BaseCrudController<
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   T extends BaseEntity,
-  C,
+  C extends RequiredEntityData<T>,
   U,
   Q extends PageOptionsDto,
 >(createDto: Type<C>, updateDto: Type<U>, queryDto: Type<Q>): any {
@@ -34,8 +35,12 @@ export function BaseCrudController<
     { whitelist: true, transform: true },
     { query: queryDto },
   );
-  class BCrudController<T extends BaseEntity, C, U, Q extends PageOptionsDto>
-    implements IBaseCrud<T, C, U, Q>
+  class BCrudController<
+    T extends BaseEntity,
+    C extends RequiredEntityData<T>,
+    U,
+    Q extends PageOptionsDto,
+  > implements IBaseCrud<T, C, U, Q>
   {
     constructor(public service: BaseCrudService<T, C, U, Q>) {}
 

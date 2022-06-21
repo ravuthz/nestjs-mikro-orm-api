@@ -1,14 +1,18 @@
 import { ExecutionContext, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { IAuthGuard } from '@nestjs/passport';
+import { AuthGuard, IAuthGuard } from '@nestjs/passport';
+import { User } from '../../user/entities/user.entity';
 import { ROLES_KEY } from '../auth.constants';
 import { RequestUser } from '../request-user.interface';
-import { JwtAuthGuard } from './jwt-auth.guard';
 
 @Injectable()
-export class RolesGuard extends JwtAuthGuard implements IAuthGuard {
+export class RolesGuard extends AuthGuard('jwt') implements IAuthGuard {
   constructor(private reflector: Reflector) {
     super();
+  }
+
+  handleRequest(err: unknown, user: User): any {
+    return user;
   }
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -24,7 +28,7 @@ export class RolesGuard extends JwtAuthGuard implements IAuthGuard {
     }
 
     const { user }: RequestUser = context.switchToHttp().getRequest();
-    const roles = await user.getAllRoleNames();
+    const roles = await user?.getAllRoleNames();
     return requiredRoles.some((role) => roles.includes(role));
   }
 }

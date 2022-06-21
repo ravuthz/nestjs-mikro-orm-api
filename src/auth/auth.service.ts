@@ -4,7 +4,6 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { encryptPassword } from '../shared/utils/auth';
 import { toUserDto } from '../shared/utils/mappers';
 import { User } from '../user/entities/user.entity';
 import { UserService } from '../user/user.service';
@@ -22,7 +21,6 @@ export class AuthService {
   ) {}
 
   async register(userDto: RegisterUserDto): Promise<User> {
-    userDto.password = await encryptPassword(userDto.password);
     return await this.usersService.create(userDto);
   }
 
@@ -32,7 +30,6 @@ export class AuthService {
   }
 
   async refresh(user: User): Promise<TokenDto> {
-    // return this.generateToken(user);
     return this.jwtCreateToken(user);
   }
 

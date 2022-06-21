@@ -5,7 +5,6 @@ import {
   Property,
   Unique,
 } from '@mikro-orm/core';
-import { Exclude } from 'class-transformer';
 import { IsEmail } from 'class-validator';
 import { Role } from '../../role/entities/role.entity';
 import { BaseEntity } from '../../shared/entities/base.entity';
@@ -27,8 +26,7 @@ export class User extends BaseEntity {
   @Unique()
   username: string;
 
-  @Property()
-  @Exclude()
+  @Property({ hidden: true })
   password: string;
 
   @Property({ nullable: true })
@@ -45,8 +43,7 @@ export class User extends BaseEntity {
   async getAllRoleNames() {
     await this.roles.init();
     const roles = this.roles.getItems();
-    console.log('getAllRoleNames: ', roles);
-    return roles.map((item) => item.name);
+    return roles?.map((item) => item.name);
   }
 
   async getAllPermissionNames() {
@@ -57,7 +54,6 @@ export class User extends BaseEntity {
       await role.permissions.init();
       permissions = [...permissions, ...role.permissions.getItems()];
     }
-    console.log('getAllPermissionNames: ', permissions);
     return permissions.map((item) => item.name);
   }
 }

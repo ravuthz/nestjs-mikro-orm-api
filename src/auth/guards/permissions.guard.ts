@@ -29,7 +29,7 @@ export class PermissionsGuard extends JwtAuthGuard implements IAuthGuard {
     }
 
     const { user }: RequestUser = context.switchToHttp().getRequest();
-    const permissions = await user.getAllPermissionNames();
+    const permissions = await user?.getAllPermissionNames();
     return requiredPermissions.some((role) => permissions.includes(role));
   }
 }

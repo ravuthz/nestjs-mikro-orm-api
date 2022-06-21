@@ -1,6 +1,5 @@
 import { Unique } from '@mikro-orm/core';
 import { IsEmail, IsNotEmpty, IsOptional, IsString } from 'class-validator';
-import { Exclude } from 'class-transformer';
 
 export class CreateUserDto {
   @IsNotEmpty()
@@ -23,7 +22,6 @@ export class CreateUserDto {
 
   @IsNotEmpty()
   @IsString()
-  @Exclude()
   password: string;
 
   @IsOptional()
