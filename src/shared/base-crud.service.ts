@@ -1,5 +1,6 @@
 import {
   AnyEntity,
+  EntityData,
   EntityRepository,
   RequiredEntityData,
 } from '@mikro-orm/core';
@@ -12,7 +13,7 @@ import { PageResponseDto } from './dto/page-response.dto';
 export class BaseCrudService<
   T extends AnyEntity<T>,
   C extends RequiredEntityData<T>,
-  U,
+  U extends EntityData<T>,
   Q extends PageOptionsDto,
 > implements IBaseCrud<T, C, U, Q>
 {
@@ -23,7 +24,7 @@ export class BaseCrudService<
   async findAll(query: Q) {
     this.logger.debug(JSON.stringify(query || {}, null, 2));
     const results = await this.repository.findAndCount(null, query.toOptions());
-    return new PageResponseDto(results, query);
+    return new PageResponseDto<T>(results, query);
   }
 
   async findOne(id: any) {
@@ -31,7 +32,7 @@ export class BaseCrudService<
   }
 
   async create(createNoteDto: C) {
-    const item = this.repository.create(createNoteDto);
+    const item = await this.repository.create(createNoteDto);
     await this.repository.persistAndFlush(item);
     return item;
   }

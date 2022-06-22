@@ -8,5 +8,6 @@ import { RoleService } from './role.service';
   imports: [MikroOrmModule.forFeature([Role])],
   controllers: [RoleController],
   providers: [RoleService],
+  exports: [RoleService],
 })
 export class RoleModule {}

@@ -14,12 +14,13 @@
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
-    "test": "jest --logHeapUsage",
+    "test": "jest",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "test:all": "npm run test -- --logHeapUsage --verbose --forceExit --detectOpenHandles --testTimeout=50000&& npm run test:e2e -- --logHeapUsage --verbose --forceExit --detectOpenHandles --testTimeout=50000"
   },
   "dependencies": {
     "@mikro-orm/cli": "^5.1.5",

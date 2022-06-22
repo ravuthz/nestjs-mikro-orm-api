@@ -1,4 +1,4 @@
-import { RequiredEntityData } from '@mikro-orm/core';
+import { EntityData, RequiredEntityData } from '@mikro-orm/core';
 import {
   Body,
   Delete,
@@ -20,7 +20,7 @@ export function BaseCrudController<
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   T extends BaseEntity,
   C extends RequiredEntityData<T>,
-  U,
+  U extends EntityData<T>,
   Q extends PageOptionsDto,
 >(createDto: Type<C>, updateDto: Type<U>, queryDto: Type<Q>): any {
   const createPipe = new AbstractValidationPipe(
@@ -38,7 +38,7 @@ export function BaseCrudController<
   class BCrudController<
     T extends BaseEntity,
     C extends RequiredEntityData<T>,
-    U,
+    U extends EntityData<T>,
     Q extends PageOptionsDto,
   > implements IBaseCrud<T, C, U, Q>
   {

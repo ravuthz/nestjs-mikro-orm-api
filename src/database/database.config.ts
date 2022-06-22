@@ -9,6 +9,7 @@ const database = config().database;
 
 const options = {
   ...database,
+  timezone: '+07:00',
   entities: ['dist/**/*.entity.js'],
   entitiesTs: ['src/**/*.entity.ts'],
   allowGlobalContext: true,
@@ -36,6 +37,11 @@ const options = {
     glob: '!(*.d).{js,ts}', // how to match seeder files (all .js and .ts files, but not .d.ts)
     emit: 'ts', // seeder generation mode
     fileName: (className: string) => className, // seeder file naming convention
+  },
+  schemaGenerator: {
+    disableForeignKeys: true, // wrap statements with `set foreign_key_checks = 0` or equivalent
+    createForeignKeyConstraints: true, // whether to generate FK constraints
+    ignoreSchema: [], // allows ignoring some schemas when diffing
   },
   findOneOrFailHandler: (
     entityName: string,

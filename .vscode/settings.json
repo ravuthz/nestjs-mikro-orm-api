@@ -10,5 +10,7 @@
   "typescript.preferences.importModuleSpecifier": "relative",
   "[sql]": {
     "editor.defaultFormatter": "mtxr.sqltools"
-  }
+  },
+  "jest.autoRun": "off",
+  "jest.showTerminalOnLaunch": true
 }

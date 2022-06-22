@@ -28,7 +28,7 @@ export class RolesGuard extends AuthGuard('jwt') implements IAuthGuard {
     }
 
     const { user }: RequestUser = context.switchToHttp().getRequest();
-    const roles = await user?.getAllRoleNames();
+    const roles = user ? await user.getAllRoleNames() : [];
     return requiredRoles.some((role) => roles.includes(role));
   }
 }

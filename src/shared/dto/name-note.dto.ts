@@ -1,11 +1,16 @@
-import { IsNotEmpty, IsString } from 'class-validator';
 import { Optional } from '@nestjs/common';
+import { IsNotEmpty, IsString } from 'class-validator';
 
-export class NameNoteDto {
+export abstract class NameNoteDto {
   @IsNotEmpty()
   @IsString()
   name: string;
 
   @Optional()
-  note: string;
+  @IsString()
+  note?: string;
+
+  constructor(partial: Partial<NameNoteDto> = {}) {
+    Object.assign(this, partial);
+  }
 }

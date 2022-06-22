@@ -55,9 +55,9 @@ export class AuthController {
   }
 
   @Get('user-read')
-  // @Permissions('admin:read')
+  // @Permissions('USER:READ')
   // @UseGuards(AuthGuard(), PermissionsGuard)
-  @HasPermissions('admin:read')
+  @HasPermissions('USER:READ')
   public async testAuthUserPermissions(
     @Req() req: RequestUser,
   ): Promise<UserDto> {
@@ -73,9 +73,9 @@ export class AuthController {
   }
 
   @Get('admin-read')
-  // @Permissions('admin:read')
+  // @Permissions('USER:READ')
   // @UseGuards(AuthGuard(), PermissionsGuard)
-  @HasPermissions('admin:read')
+  @HasPermissions('USER:READ')
   public async testAuthAdminPermissions(
     @Req() req: RequestUser,
   ): Promise<UserDto> {

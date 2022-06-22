@@ -1,5 +1,4 @@
-import { Collection, Entity, ManyToMany, Property } from '@mikro-orm/core';
-import { Role } from '../../role/entities/role.entity';
+import { Entity, Property } from '@mikro-orm/core';
 import { BaseEntity } from '../../shared/entities/base.entity';
 
 @Entity({ tableName: 'permissions' })
@@ -10,18 +9,19 @@ export class Permission extends BaseEntity {
   @Property({ nullable: true })
   note: string;
 
-  @ManyToMany(() => Role, (role) => role.permissions)
-  roles = new Collection<Role>(this);
+  // @ManyToMany(() => Role, 'permissions') // (role) => role.permissions
+  // roles = new Collection<Role>(this);
 
-  constructor(partial: Partial<Permission> = {}) {
+  constructor(name: string, note: string) {
     super();
-    Object.assign(this, partial);
+    this.name = name;
+    this.note = note;
   }
 
   static makePermission(model, action) {
     const name = `${model}:${action}`.toLowerCase();
     const note = `Generate ${action} for ${model} by system`;
-    return new Permission({ name, note });
+    return new Permission(name, note);
   }
 
   static makeCrudFor(model) {

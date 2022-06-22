@@ -32,8 +32,13 @@ export class User extends BaseEntity {
   @Property({ nullable: true })
   profileImage?: string;
 
-  @ManyToMany()
-  roles: Collection<Role> = new Collection<Role>(this);
+  @ManyToMany(() => Role)
+  roles = new Collection<Role>(this);
+
+  @Property({ persist: false })
+  get fullName() {
+    return `${this.firstName} ${this.lastName}`;
+  }
 
   constructor(partial: Partial<User> = {}) {
     super();
@@ -43,7 +48,9 @@ export class User extends BaseEntity {
   async getAllRoleNames() {
     await this.roles.init();
     const roles = this.roles.getItems();
-    return roles?.map((item) => item.name);
+    const names = roles?.map((item) => item.name);
+    console.log(`${this.username} getAllRoleNames:`, names);
+    return names;
   }
 
   async getAllPermissionNames() {
@@ -54,6 +61,8 @@ export class User extends BaseEntity {
       await role.permissions.init();
       permissions = [...permissions, ...role.permissions.getItems()];
     }
-    return permissions.map((item) => item.name);
+    const names = permissions.map((item) => item.name);
+    console.log(`${this.username} getAllPermissionNames:`, names);
+    return names;
   }
 }

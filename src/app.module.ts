@@ -10,7 +10,7 @@ import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
-    SharedModule,
+    SharedModule.init(),
     AuthModule,
     NoteModule,
     UserModule,

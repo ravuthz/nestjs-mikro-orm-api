@@ -8,7 +8,7 @@ describe('AuthController', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [SharedModule, AuthModule],
+      imports: [SharedModule.init({ testing: true }), AuthModule],
     }).compile();
 
     controller = module.get<AuthController>(AuthController);

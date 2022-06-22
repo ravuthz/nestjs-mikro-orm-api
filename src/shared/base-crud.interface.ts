@@ -9,7 +9,7 @@ export interface IBaseCrud<
 > {
   findAll(
     query: QueryDto,
-  ): Promise<EntityType[]> | Promise<PageResponseDto<unknown>>;
+  ): Promise<EntityType[]> | Promise<PageResponseDto<EntityType>>;
 
   findOne(id: string | number): Promise<EntityType>;
 

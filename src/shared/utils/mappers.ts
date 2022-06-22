@@ -10,7 +10,7 @@ export const toUserDto = async (data: User): Promise<UserDto> => {
     firstName,
     lastName,
     profileImage,
-    roleNames: await data?.getAllRoleNames(),
-    permissionNames: await data?.getAllPermissionNames(),
+    // roleNames: await data?.getAllRoleNames(),
+    // permissionNames: await data?.getAllPermissionNames(),
   };
 };
