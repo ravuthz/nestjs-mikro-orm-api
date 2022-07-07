@@ -12,6 +12,15 @@ import { UserFactory } from '../factories/UserFactory';
 export class UserRolePermissionSeeder extends Seeder {
   private readonly logger = new Logger(UserRolePermissionSeeder.name);
 
+  private async saveUser(em, data: any) {
+    const { password, ...body } = data;
+    let user = await em.findOne(User, { ...body });
+    if (!user) {
+      user = em.create(User, { ...body, password });
+    }
+    return user;
+  }
+
   async run(em: EntityManager): Promise<void> {
     // Create 4 permissions to 2 different roles for a single user
     // const permissions: Permission[] = new PermissionFactory(em).each(permission => {
@@ -22,6 +31,46 @@ export class UserRolePermissionSeeder extends Seeder {
     // console.log(permissions);
 
     const password = await encryptPassword('123123');
+
+    const user1 = await this.saveUser(em, {
+      firstName: 'Admin',
+      lastName: 'Mr',
+      email: 'adminz@gmail.com',
+      username: 'adminz',
+      password,
+    });
+
+    const user2 = await this.saveUser(em, {
+      firstName: 'Ravuth',
+      lastName: 'Mr',
+      email: 'ravuthz@gmail.com',
+      username: 'ravuthz',
+      password,
+    });
+
+    const user3 = await this.saveUser(em, {
+      firstName: 'User',
+      lastName: 'Mr',
+      email: 'ravuthz+1@gmail.com',
+      username: 'user',
+      password,
+    });
+
+    const user4 = await this.saveUser(em, {
+      firstName: 'Visitor',
+      lastName: 'Mr',
+      email: 'ravuthz+2@gmail.com',
+      username: 'visitor',
+      password,
+    });
+
+    const user5 = await this.saveUser(em, {
+      firstName: 'Editor',
+      lastName: 'Mr',
+      email: 'ravuthz+3@gmail.com',
+      username: 'editor',
+      password,
+    });
 
     const users = new UserFactory(em)
       .each((user) => {
@@ -35,46 +84,6 @@ export class UserRolePermissionSeeder extends Seeder {
         );
       })
       .make(2);
-
-    const user1 = em.create(User, {
-      firstName: 'Admin',
-      lastName: 'Mr',
-      email: 'adminz@gmail.com',
-      username: 'adminz',
-      password,
-    });
-
-    const user2 = em.create(User, {
-      firstName: 'Ravuth',
-      lastName: 'Mr',
-      email: 'ravuthz@gmail.com',
-      username: 'ravuthz',
-      password,
-    });
-
-    const user3 = em.create(User, {
-      firstName: 'User',
-      lastName: 'Mr',
-      email: 'ravuthz+1@gmail.com',
-      username: 'user',
-      password,
-    });
-
-    const user4 = em.create(User, {
-      firstName: 'Visitor',
-      lastName: 'Mr',
-      email: 'ravuthz+2@gmail.com',
-      username: 'visitor',
-      password,
-    });
-
-    const user5 = em.create(User, {
-      firstName: 'Editor',
-      lastName: 'Mr',
-      email: 'ravuthz+3@gmail.com',
-      username: 'editor',
-      password,
-    });
 
     this.logger.debug('Seeding user ...', {
       user1,

@@ -49,7 +49,7 @@ export class User extends BaseEntity {
     await this.roles.init();
     const roles = this.roles.getItems();
     const names = roles?.map((item) => item.name);
-    console.log(`${this.username} getAllRoleNames:`, names);
+    // console.log(`${this.username} getAllRoleNames:`, names);
     return names;
   }
 
@@ -62,7 +62,7 @@ export class User extends BaseEntity {
       permissions = [...permissions, ...role.permissions.getItems()];
     }
     const names = permissions.map((item) => item.name);
-    console.log(`${this.username} getAllPermissionNames:`, names);
+    // console.log(`${this.username} getAllPermissionNames:`, names);
     return names;
   }
 }
