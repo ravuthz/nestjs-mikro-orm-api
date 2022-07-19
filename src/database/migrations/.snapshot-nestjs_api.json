@@ -1,12 +1,11 @@
 {
-  "namespaces": ["public"],
-  "name": "public",
+  "namespaces": [],
   "tables": [
     {
       "columns": {
         "id": {
           "name": "id",
-          "type": "serial",
+          "type": "int",
           "unsigned": true,
           "autoincrement": true,
           "primary": true,
@@ -15,22 +14,22 @@
         },
         "created_at": {
           "name": "created_at",
-          "type": "timestamptz(0)",
+          "type": "datetime",
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
           "nullable": false,
-          "length": 6,
+          "length": 0,
           "mappedType": "datetime"
         },
         "updated_at": {
           "name": "updated_at",
-          "type": "timestamptz(0)",
+          "type": "datetime",
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
           "nullable": false,
-          "length": 6,
+          "length": 0,
           "mappedType": "datetime"
         },
         "first_name": {
@@ -89,7 +88,6 @@
         }
       },
       "name": "users",
-      "schema": "public",
       "indexes": [
         {
           "columnNames": ["email"],
@@ -106,7 +104,7 @@
           "unique": true
         },
         {
-          "keyName": "users_pkey",
+          "keyName": "PRIMARY",
           "columnNames": ["id"],
           "composite": false,
           "primary": true,
@@ -120,7 +118,7 @@
       "columns": {
         "id": {
           "name": "id",
-          "type": "serial",
+          "type": "int",
           "unsigned": true,
           "autoincrement": true,
           "primary": true,
@@ -129,22 +127,22 @@
         },
         "created_at": {
           "name": "created_at",
-          "type": "timestamptz(0)",
+          "type": "datetime",
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
           "nullable": false,
-          "length": 6,
+          "length": 0,
           "mappedType": "datetime"
         },
         "updated_at": {
           "name": "updated_at",
-          "type": "timestamptz(0)",
+          "type": "datetime",
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
           "nullable": false,
-          "length": 6,
+          "length": 0,
           "mappedType": "datetime"
         },
         "name": {
@@ -167,10 +165,9 @@
         }
       },
       "name": "roles",
-      "schema": "public",
       "indexes": [
         {
-          "keyName": "roles_pkey",
+          "keyName": "PRIMARY",
           "columnNames": ["id"],
           "composite": false,
           "primary": true,
@@ -185,7 +182,7 @@
         "user_id": {
           "name": "user_id",
           "type": "int",
-          "unsigned": false,
+          "unsigned": true,
           "autoincrement": false,
           "primary": false,
           "nullable": false,
@@ -194,7 +191,7 @@
         "role_id": {
           "name": "role_id",
           "type": "int",
-          "unsigned": false,
+          "unsigned": true,
           "autoincrement": false,
           "primary": false,
           "nullable": false,
@@ -202,10 +199,23 @@
         }
       },
       "name": "users_roles",
-      "schema": "public",
       "indexes": [
         {
-          "keyName": "users_roles_pkey",
+          "columnNames": ["user_id"],
+          "composite": false,
+          "keyName": "users_roles_user_id_index",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columnNames": ["role_id"],
+          "composite": false,
+          "keyName": "users_roles_role_id_index",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "keyName": "PRIMARY",
           "columnNames": ["user_id", "role_id"],
           "composite": true,
           "primary": true,
@@ -217,18 +227,18 @@
         "users_roles_user_id_foreign": {
           "constraintName": "users_roles_user_id_foreign",
           "columnNames": ["user_id"],
-          "localTableName": "public.users_roles",
+          "localTableName": "users_roles",
           "referencedColumnNames": ["id"],
-          "referencedTableName": "public.users",
+          "referencedTableName": "users",
           "deleteRule": "cascade",
           "updateRule": "cascade"
         },
         "users_roles_role_id_foreign": {
           "constraintName": "users_roles_role_id_foreign",
           "columnNames": ["role_id"],
-          "localTableName": "public.users_roles",
+          "localTableName": "users_roles",
           "referencedColumnNames": ["id"],
-          "referencedTableName": "public.roles",
+          "referencedTableName": "roles",
           "deleteRule": "cascade",
           "updateRule": "cascade"
         }
@@ -238,7 +248,7 @@
       "columns": {
         "id": {
           "name": "id",
-          "type": "serial",
+          "type": "int",
           "unsigned": true,
           "autoincrement": true,
           "primary": true,
@@ -247,22 +257,22 @@
         },
         "created_at": {
           "name": "created_at",
-          "type": "timestamptz(0)",
+          "type": "datetime",
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
           "nullable": false,
-          "length": 6,
+          "length": 0,
           "mappedType": "datetime"
         },
         "updated_at": {
           "name": "updated_at",
-          "type": "timestamptz(0)",
+          "type": "datetime",
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
           "nullable": false,
-          "length": 6,
+          "length": 0,
           "mappedType": "datetime"
         },
         "name": {
@@ -285,10 +295,9 @@
         }
       },
       "name": "permissions",
-      "schema": "public",
       "indexes": [
         {
-          "keyName": "permissions_pkey",
+          "keyName": "PRIMARY",
           "columnNames": ["id"],
           "composite": false,
           "primary": true,
@@ -303,7 +312,7 @@
         "role_id": {
           "name": "role_id",
           "type": "int",
-          "unsigned": false,
+          "unsigned": true,
           "autoincrement": false,
           "primary": false,
           "nullable": false,
@@ -312,7 +321,7 @@
         "permission_id": {
           "name": "permission_id",
           "type": "int",
-          "unsigned": false,
+          "unsigned": true,
           "autoincrement": false,
           "primary": false,
           "nullable": false,
@@ -320,10 +329,23 @@
         }
       },
       "name": "roles_permissions",
-      "schema": "public",
       "indexes": [
         {
-          "keyName": "roles_permissions_pkey",
+          "columnNames": ["role_id"],
+          "composite": false,
+          "keyName": "roles_permissions_role_id_index",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columnNames": ["permission_id"],
+          "composite": false,
+          "keyName": "roles_permissions_permission_id_index",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "keyName": "PRIMARY",
           "columnNames": ["role_id", "permission_id"],
           "composite": true,
           "primary": true,
@@ -335,18 +357,18 @@
         "roles_permissions_role_id_foreign": {
           "constraintName": "roles_permissions_role_id_foreign",
           "columnNames": ["role_id"],
-          "localTableName": "public.roles_permissions",
+          "localTableName": "roles_permissions",
           "referencedColumnNames": ["id"],
-          "referencedTableName": "public.roles",
+          "referencedTableName": "roles",
           "deleteRule": "cascade",
           "updateRule": "cascade"
         },
         "roles_permissions_permission_id_foreign": {
           "constraintName": "roles_permissions_permission_id_foreign",
           "columnNames": ["permission_id"],
-          "localTableName": "public.roles_permissions",
+          "localTableName": "roles_permissions",
           "referencedColumnNames": ["id"],
-          "referencedTableName": "public.permissions",
+          "referencedTableName": "permissions",
           "deleteRule": "cascade",
           "updateRule": "cascade"
         }
@@ -356,7 +378,7 @@
       "columns": {
         "id": {
           "name": "id",
-          "type": "serial",
+          "type": "int",
           "unsigned": true,
           "autoincrement": true,
           "primary": true,
@@ -365,22 +387,22 @@
         },
         "created_at": {
           "name": "created_at",
-          "type": "timestamptz(0)",
+          "type": "datetime",
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
           "nullable": false,
-          "length": 6,
+          "length": 0,
           "mappedType": "datetime"
         },
         "updated_at": {
           "name": "updated_at",
-          "type": "timestamptz(0)",
+          "type": "datetime",
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
           "nullable": false,
-          "length": 6,
+          "length": 0,
           "mappedType": "datetime"
         },
         "name": {
@@ -403,10 +425,9 @@
         }
       },
       "name": "note",
-      "schema": "public",
       "indexes": [
         {
-          "keyName": "note_pkey",
+          "keyName": "PRIMARY",
           "columnNames": ["id"],
           "composite": false,
           "primary": true,
