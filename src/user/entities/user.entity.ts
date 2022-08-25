@@ -5,6 +5,7 @@ import {
   Property,
   Unique,
 } from '@mikro-orm/core';
+import { Exclude } from 'class-transformer';
 import { IsEmail } from 'class-validator';
 import { Role } from '../../role/entities/role.entity';
 import { BaseEntity } from '../../shared/entities/base.entity';
@@ -26,12 +27,14 @@ export class User extends BaseEntity {
   @Unique()
   username: string;
 
+  @Exclude()
   @Property({ hidden: true })
   password: string;
 
   @Property({ nullable: true })
   profileImage?: string;
 
+  @Exclude()
   @ManyToMany(() => Role)
   roles = new Collection<Role>(this);
 
