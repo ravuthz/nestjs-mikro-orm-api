@@ -6,8 +6,14 @@
 # We can clone branch `auth-mysql` for mysql database
 git clone -b auth-mysql git@github.com:ravuthz/nestjs-mikro-orm-api.git mikro-orm-auth-api
 
+# Or using degit
+npx degit https://github.com/ravuthz/nestjs-mikro-orm-api#auth-mysql mikro-orm-auth-api
+
 # Or clone branch `auth-postgresql` for postgresql database
 git clone -b auth-postgresql git@github.com:ravuthz/nestjs-mikro-orm-api.git mikro-orm-auth-api
+
+# Or using degit
+npx degit https://github.com/ravuthz/nestjs-mikro-orm-api#auth-postgresql mikro-orm-auth-api
 
 # Go project directory
 cd mikro-orm-auth-api
